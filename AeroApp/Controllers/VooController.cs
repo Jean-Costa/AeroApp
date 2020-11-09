@@ -12,48 +12,48 @@ namespace AeroApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReservaController : ControllerBase
+    public class VooController : ControllerBase
     {
         private readonly AeroContext _context;
 
-        public ReservaController(AeroContext context)
+        public VooController(AeroContext context)
         {
             _context = context;
         }
 
-        // GET: api/Reserva
+        // GET: api/Voo
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reserva>>> GetReservas()
+        public async Task<ActionResult<IEnumerable<Voo>>> GetVoos()
         {
-            return await _context.Reservas.ToListAsync();
+            return await _context.Voos.ToListAsync();
         }
 
-        // GET: api/Reserva/5
+        // GET: api/Voo/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Reserva>> GetReserva(int id)
+        public async Task<ActionResult<Voo>> GetVoo(int id)
         {
-            var reserva = await _context.Reservas.FindAsync(id);
+            var voo = await _context.Voos.FindAsync(id);
 
-            if (reserva == null)
+            if (voo == null)
             {
                 return NotFound();
             }
 
-            return reserva;
+            return voo;
         }
 
-        // PUT: api/Reserva/5
+        // PUT: api/Voo/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReserva(int id, Reserva reserva)
+        public async Task<IActionResult> PutVoo(int id, Voo voo)
         {
-            if (id != reserva.Id)
+            if (id != voo.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(reserva).State = EntityState.Modified;
+            _context.Entry(voo).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +61,7 @@ namespace AeroApp.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ReservaExists(id))
+                if (!VooExists(id))
                 {
                     return NotFound();
                 }
@@ -74,43 +74,44 @@ namespace AeroApp.Controllers
             return NoContent();
         }
 
-        // POST: api/Reserva
+        // POST: api/Voo
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Reserva>> PostReserva(ReservaDTO reservaDTO)
+        public async Task<ActionResult<Voo>> PostVoo(VooDTO vooDTO)
         {
-            var reservaModel = new Reserva();
-            reservaModel.VooId = reservaDTO.VooId;
-            reservaModel.Documento = reservaDTO.Documento;
-            reservaModel.Poltrona = reservaDTO.Poltrona;
+            var voomodel = new Voo();
+            voomodel.Id = vooDTO.Id;
+            voomodel.LocalOrigemId = vooDTO.IdOrigem;
+            voomodel.LocalDestinoId = vooDTO.IdDestino;
+            voomodel.DataIda = vooDTO.DataIda;
+            voomodel.DataVolta = vooDTO.DataVolta;
 
-
-            _context.Reservas.Add(reservaModel);
+            _context.Voos.Add(voomodel);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetReserva", new { id = reservaModel.Id }, reservaModel);
+            return CreatedAtAction("GetVoo", new { id = voomodel.Id }, voomodel);
         }
 
-        // DELETE: api/Reserva/5
+        // DELETE: api/Voo/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Reserva>> DeleteReserva(int id)
+        public async Task<ActionResult<Voo>> DeleteVoo(int id)
         {
-            var reserva = await _context.Reservas.FindAsync(id);
-            if (reserva == null)
+            var voo = await _context.Voos.FindAsync(id);
+            if (voo == null)
             {
                 return NotFound();
             }
 
-            _context.Reservas.Remove(reserva);
+            _context.Voos.Remove(voo);
             await _context.SaveChangesAsync();
 
-            return reserva;
+            return voo;
         }
 
-        private bool ReservaExists(int id)
+        private bool VooExists(int id)
         {
-            return _context.Reservas.Any(e => e.Id == id);
+            return _context.Voos.Any(e => e.Id == id);
         }
     }
 }
